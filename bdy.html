@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Happy Birthday Pookie 💖</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Comic Sans MS", cursive;
+      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+      text-align: center;
+      color: #e60073;
+      overflow-x: hidden;
+    }
+    h1 {
+      margin-top: 30px;
+      text-shadow: 2px 2px 5px #fff;
+      font-size: 40px;
+      animation: glow 1.5s infinite alternate;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #ff4d94, 0 0 20px #ff1a75; }
+      to   { text-shadow: 0 0 20px #ff99cc, 0 0 30px #ff4d94; }
+    }
+    button {
+      padding: 12px 24px;
+      margin: 15px;
+      font-size: 18px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .yes { background: #ff4d94; color: white; }
+    .yes:hover { background: #ff1a75; }
+    .no { background: #ddd; }
+    .no:hover { background: #bbb; }
+    .hidden { display: none; }
+
+    .carousel {
+      display: flex;
+      overflow-x: auto;
+      gap: 20px;
+      margin-top: 20px;
+      padding: 10px;
+      justify-content: center;
+    }
+    .carousel img {
+      width: 220px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      transition: transform 0.3s;
+    }
+    .carousel img:hover { transform: scale(1.05); }
+
+    .modal {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      visibility: hidden;
+    }
+    .modal-content {
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+    .modal.show { visibility: visible; }
+
+    canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .balloon {
+      position: absolute;
+      width: 60px;
+      animation: float 8s linear infinite;
+    }
+    @keyframes float {
+      from { transform: translateY(100vh); }
+      to { transform: translateY(-150px); }
+    }
+  </style>
+</head>
+<body>
+
+  <h1 id="question">Hey Pookie 💕, is today your birthday?</h1>
+  <div id="buttons">
+    <button class="yes" onclick="celebrate()">Yes 🎂</button>
+    <button class="no" onclick="uniqueWish()">No 😅</button>
+  </div>
+
+  <!-- Celebration section -->
+  <div id="celebration" class="hidden">
+    <h1>🎉 Happy Birthday My Love 🎉</h1>
+    <p>You make my world magical 💖</p>
+
+    <!-- Music (starts when she clicks Yes) -->
+    <audio id="song" loop>
+      <source src="https://www2.cs.uic.edu/~i101/SoundFiles/HappyBirthdaySong.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="carousel">
+      <!-- 🔹 Your pictures -->
+      <img src="c:\Users\anujp\Downloads\931a9bb5-c3c9-46d5-9104-a6fdacdfc895.jpeg" alt="her picture 1">
+      <img src="c:\Users\anujp\OneDrive\Pictures\Screenshots\Screenshot 2025-06-01 203158.png" alt="her picture 2">
+      <img src="c:\Users\anujp\OneDrive\Pictures\Screenshots\Screenshot 2025-06-01 203724.png" alt="her picture 3">
+
+      <!-- 🔹 Working gift images -->
+      
+      <img src="https://pngimg.com/uploads/teddy_bear/teddy_bear_PNG54.png" alt="teddy bear">
+      <img src="https://pngimg.com/uploads/balloon/balloon_PNG4961.png" alt="balloon">
+    </div>
+
+    <button class="yes" onclick="openGift()">🎁 Open Secret Gift 🎁</button>
+  </div>
+
+  <!-- Unique wish section -->
+  <div id="unique" class="hidden">
+    <h1>Even if it’s not… every day feels like your birthday to me 💕</h1>
+    <p>I’m still wishing you happiness, cuteness and love 🎂💖</p>
+  </div>
+
+  <!-- Secret Note Modal -->
+  <div id="giftModal" class="modal">
+    <div class="modal-content">
+      <h2>💌 From Me</h2>
+      <p>
+        Dear love, you’re not just my girlfriend, you’re my everything 💕.<br>
+        Every moment with you feels like magic ✨.<br>
+        Happiest Birthday 🎂🎉.<br>
+        I’m so lucky you’re mine 💖.
+        Happy Birthday, my favorite glitch in the system.<br>
+         You turned my messy chaos into something worth living, just by being you.<br>
+          May this year shine as bright as your smile and crash every doubt along the way. 💖🎂
+      </p>
+      <button onclick="closeGift()">Close</button>
+    </div>
+  </div>
+
+  <canvas id="confetti"></canvas>
+
+  <script>
+    function celebrate() {
+      document.getElementById("question").style.display = "none";
+      document.getElementById("buttons").style.display = "none";
+      document.getElementById("celebration").style.display = "block";
+      startConfetti();
+      releaseBalloons();
+      document.getElementById("song").play(); // 🎵 start song here
+    }
+
+    function uniqueWish() {
+      document.getElementById("question").style.display = "none";
+      document.getElementById("buttons").style.display = "none";
+      document.getElementById("unique").style.display = "block";
+    }
+
+    function openGift() {
+      document.getElementById("giftModal").classList.add("show");
+    }
+    function closeGift() {
+      document.getElementById("giftModal").classList.remove("show");
+    }
+
+    // Confetti
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    let confetti = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function startConfetti() {
+      confetti = Array.from({length:150}, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height - canvas.height,
+        r: Math.random() * 6 + 4,
+        d: Math.random() * 0.5 + 0.5,
+        color: `hsl(${Math.random()*360}, 100%, 50%)`
+      }));
+      requestAnimationFrame(drawConfetti);
+    }
+
+    function drawConfetti() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      confetti.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,2*Math.PI,false);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+        p.y += p.d*3;
+        if(p.y > canvas.height){
+          p.y = -10; p.x = Math.random()*canvas.width;
+        }
+      });
+      requestAnimationFrame(drawConfetti);
+    }
+
+    // Balloons
+    function releaseBalloons() {
+      for (let i=0; i<8; i++) {
+        let balloon = document.createElement("img");
+        balloon.src = "https://pngimg.com/uploads/balloon/balloon_PNG4961.png";
+        balloon.className = "balloon";
+        balloon.style.left = Math.random()*90 + "vw";
+        balloon.style.animationDuration = (6 + Math.random()*5) + "s";
+        document.body.appendChild(balloon);
+      }
+    }
+  </script>
+</body>
+</html>
